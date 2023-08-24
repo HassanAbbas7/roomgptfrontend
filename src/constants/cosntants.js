@@ -32,17 +32,19 @@ export const calculateRemainingDays=(startDate)=>{
 
 
 export const refreshToken = async ()=>{
-    console.log("startin to get token")
-    const response = await axios.post(REFRESH_TOKEN,{
-        refresh: localStorage.getItem("refresh")
-    })
-    console.log(await response.status)
-    if (await response.status !== 200){
+
+    try{
+        const response = await axios.post(REFRESH_TOKEN,{
+            refresh: localStorage.getItem("refresh")
+        })
+    }
+    catch{
         const navigateTo = useNavigate();
         localStorage.setItem("loggedIn", false);
         navigateTo("/login");
         return null;
     }
+    
     return (await response.data.access)
 }
 

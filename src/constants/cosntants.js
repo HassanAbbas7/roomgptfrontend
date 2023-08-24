@@ -35,6 +35,7 @@ export const refreshToken = async ()=>{
     const response = await axios.post(REFRESH_TOKEN,{
         refresh: localStorage.getItem("refresh")
     })
+    console.log(await response.status)
     if (await response.status !== 200){
         const navigateTo = useNavigate();
         localStorage.setItem("loggedIn", false);

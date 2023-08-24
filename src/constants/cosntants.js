@@ -31,22 +31,21 @@ export const calculateRemainingDays=(startDate)=>{
 }
 
 
-export const refreshToken = async ()=>{
-
-    try{
-        const response = await axios.post(REFRESH_TOKEN,{
+export const refreshToken = async () => {
+    try {
+        const response = await axios.post(REFRESH_TOKEN, {
             refresh: localStorage.getItem("refresh")
-        })
-    }
-    catch{
+        });
+
+        return response.data.access;
+    } catch (error) {
         const navigateTo = useNavigate();
         localStorage.setItem("loggedIn", false);
         navigateTo("/login");
         return null;
     }
-    
-    return (await response.data.access)
 }
+
 
 
 

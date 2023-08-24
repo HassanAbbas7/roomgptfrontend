@@ -21,6 +21,11 @@ export const ULTRA_PRICE_ID = 'price_1Nf3fuCZVDbuWjpWexxXNi6q'
 
 
 
+const navTo = (address)=>{
+    const navigateTo = useNavigate();
+    navigateTo(address)
+}
+
 export const calculateRemainingDays=(startDate)=>{
     let today = new Date().toISOString().slice(0, 10)
     const endDate    = today;
@@ -31,31 +36,22 @@ export const calculateRemainingDays=(startDate)=>{
 }
 
 
-export const refreshToken = () => {
-    const refreshTokenPromise = axios.post(REFRESH_TOKEN, {
-        refresh: localStorage.getItem("refresh")
-    });
+export const refreshToken = async () => {
+    try {
+        const response = await axios.post(REFRESH_TOKEN, {
+            refresh: localStorage.getItem("refresh")
+        });
 
-    return {
-        then: (onSuccess, onError) => {
-            refreshTokenPromise
-                .then(response => {
-                    onSuccess(response.data.access);
-                })
-                .catch(error => {
-                    console.error("Uh-oh, an error occurred:", error);
+        return response.data.access;
+    } catch (error) {
+        console.log(error)
+        localStorage.setItem("loggedIn", false);
+        navTo("/login")
+        return null;
+    }
+}
 
-                    const navigateTo = useNavigate();
-                    localStorage.setItem("loggedIn", false);
-                    navigateTo("/login");
 
-                    if (onError) {
-                        onError(error);
-                    }
-                });
-        }
-    };
-};
 
 
 export const generateImage = async (fileUrl, theme, room)=>{

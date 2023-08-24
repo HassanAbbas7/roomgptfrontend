@@ -2,6 +2,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { UploadDropzone } from "react-uploader";
 import { Uploader } from "uploader";
+import { Navigate } from "react-router-dom";
 import { CompareSlider } from "../components/CompareSlider";
 import Header from "../components/Header";
 import { Link } from "react-router-dom";
@@ -16,6 +17,10 @@ import { rooms, themes } from "../../utils/dropdownTypes";
 import { useNavigate } from "react-router-dom";
 import { getCredits } from "../constants/cosntants";
 import { generateImage } from "../constants/cosntants";
+
+
+
+// const navigateTo = useNavigate()
 
 // Configuration for the uploader
 const uploader = Uploader({
@@ -45,10 +50,9 @@ const options = {
 };
 
 export default function DreamPage() {
-  const navigateTo = useNavigate()
   const [credits, setCredits] = useState()
   if (!(localStorage.getItem("loggedIn")==='true')){
-    navigateTo("/login");
+    return(<><Navigate to="/login"></Navigate></>)
   }
 
 
@@ -202,7 +206,7 @@ export default function DreamPage() {
                   restored={restoredImage}
                 />
               )}
-              {!originalPhoto ? (credits <= 0 ?<NoCreditsButton/>: <UploadDropZone />): ""}
+              {!originalPhoto ? (credits <= 0 ? <NoCreditsButton/>: <UploadDropZone />): ""}
               {originalPhoto && !restoredImage && (
                 <img
                   alt="original photo"

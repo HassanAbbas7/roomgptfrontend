@@ -32,6 +32,7 @@ export const calculateRemainingDays=(startDate)=>{
 
 
 export const refreshToken = async ()=>{
+    console.log("startin to get token")
     const response = await axios.post(REFRESH_TOKEN,{
         refresh: localStorage.getItem("refresh")
     })

@@ -31,22 +31,31 @@ export const calculateRemainingDays=(startDate)=>{
 }
 
 
-export const refreshToken = async () => {
-    try {
-        const response = await axios.post(REFRESH_TOKEN, {
-            refresh: localStorage.getItem("refresh")
-        });
+export const refreshToken = () => {
+    const refreshTokenPromise = axios.post(REFRESH_TOKEN, {
+        refresh: localStorage.getItem("refresh")
+    });
 
-        return response.data.access;
-    } catch (error) {
-        const navigateTo = useNavigate();
-        localStorage.setItem("loggedIn", false);
-        navigateTo("/login");
-        return null;
-    }
-}
+    return {
+        then: (onSuccess, onError) => {
+            refreshTokenPromise
+                .then(response => {
+                    onSuccess(response.data.access);
+                })
+                .catch(error => {
+                    console.error("Uh-oh, an error occurred:", error);
 
+                    const navigateTo = useNavigate();
+                    localStorage.setItem("loggedIn", false);
+                    navigateTo("/login");
 
+                    if (onError) {
+                        onError(error);
+                    }
+                });
+        }
+    };
+};
 
 
 export const generateImage = async (fileUrl, theme, room)=>{

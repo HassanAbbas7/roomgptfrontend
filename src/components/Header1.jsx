@@ -1,7 +1,7 @@
 "use client";
 // import Image from "next/image";
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ThemeToggler from "./ThemeToggler";
 import menuData from "./menuData";
 import logo from "../assets/bed.svg";
@@ -11,7 +11,23 @@ import { getCredits } from "../constants/cosntants";
 const Header1 = () => {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const [credits, setCredits] = useState(0);
-const aaa= true;
+  const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('click', handleOutsideClick);
+
+    return () => {
+      document.removeEventListener('click', handleOutsideClick);
+    };
+  }, []);
+  
+
   const clientId =
     "706892910099-hf7fogsfftmeag62r4nhfuifcn8h0nld.apps.googleusercontent.com";
   useEffect(() => {
@@ -190,7 +206,7 @@ const aaa= true;
                    <LogoutButton />
                    </div>
  
-                  <div
+                  <div ref={dropdownRef}
                     className="flex items-center ml-auto cursor-pointer"
                     onClick={toggleDropdown}
                   >
